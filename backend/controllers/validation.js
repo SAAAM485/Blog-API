@@ -2,61 +2,41 @@ const { body, validationResult } = require("express-validator");
 
 const usernameLengthErr = "must be between 1 and 10 characters";
 const passwordLengthErr = "must be between 1 and 16 characters";
-const folderNameErr = "must be between 1 and 30 characters";
-const fileNameErr = "must be between 1 and 30 characters";
-
-const validateSignUp = [
-    body("username")
-        .trim()
-        .isLength({ min: 1, max: 10 })
-        .withMessage(`Username ${usernameLengthErr}`),
-    body("password")
-        .trim()
-        .isLength({ min: 1, max: 16 })
-        .withMessage(`Password ${passwordLengthErr}`),
-    body("confirmPassword")
-        .trim()
-        .custom((value, { req }) => {
-            if (value !== req.body.password) {
-                throw new Error("Passwords do not match");
-            }
-            return true;
-        }),
-];
+const titleLengthErr = "must be between 1 and 30 characters";
 
 const validateSignIn = [
     body("username")
         .trim()
+        .notEmpty()
         .isLength({ min: 1, max: 10 })
         .withMessage(`Username ${usernameLengthErr}`),
     body("password")
         .trim()
+        .notEmpty()
         .isLength({ min: 1, max: 16 })
         .withMessage(`Password ${passwordLengthErr}`),
 ];
 
-module.exports = { validateSignUp, validateSignIn };
-
-// Validate folder creation data
-const validateFolder = [
-    body("name")
+const validatePost = [
+    body("title")
         .trim()
+        .notEmpty()
         .isLength({ min: 1, max: 30 })
-        .withMessage(`Folder name ${folderNameErr}`),
+        .withMessage(`Post title ${titleLengthErr}`),
+    body("content").trim().notEmpty().withMessage("Content is required"),
 ];
 
-// Validate file creation data (手動新增檔案記錄時)
-const validateFile = [
-    body("name")
+const validateComment = [
+    body("author")
         .trim()
-        .isLength({ min: 1, max: 30 })
-        .withMessage(`File name ${fileNameErr}`),
-    body("path").trim().notEmpty().withMessage("File path is required"),
+        .notEmpty()
+        .isLength({ min: 1, max: 10 })
+        .withMessage(`Username ${usernameLengthErr}`),
+    body("content").trim().notEmpty().withMessage("Content is required"),
 ];
 
 module.exports = {
-    validateSignUp,
     validateSignIn,
-    validateFolder,
-    validateFile,
+    validatePost,
+    validateComment,
 };

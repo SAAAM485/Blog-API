@@ -29,15 +29,15 @@ async function getPostById(id) {
     }
 }
 
-async function postPost(post) {
+async function postPost(title, content) {
     if (!post.title || !post.content) {
         throw new Error("Title and content are required");
     } else {
         try {
             await prisma.post.create({
                 data: {
-                    title: post.title,
-                    content: post.content,
+                    title: title,
+                    content: content,
                     published: false,
                 },
             });
@@ -80,8 +80,8 @@ async function unpublishPost(id) {
     }
 }
 
-async function putPost(id, post) {
-    if (!post.title || !post.content) {
+async function putPost(id, title, content) {
+    if (!title || !content) {
         throw new Error("Title and content are required");
     } else {
         try {
@@ -90,8 +90,8 @@ async function putPost(id, post) {
                     id: id,
                 },
                 data: {
-                    title: post.title,
-                    content: post.content,
+                    title: title,
+                    content: content,
                 },
             });
         } catch (error) {
@@ -128,14 +128,15 @@ async function getCommentsByPostId(postId) {
     }
 }
 
-async function postComment(postId, comment) {
+async function postComment(postId, author, content) {
     if (!comment.content) {
         throw new Error("Content is required");
     } else {
         try {
             await prisma.comment.create({
                 data: {
-                    content: comment.content,
+                    author: author,
+                    content: content,
                     postId: postId,
                 },
             });
@@ -143,6 +144,26 @@ async function postComment(postId, comment) {
             console.error("Error creating the comment:", error);
             throw new Error("Failed to create the comment");
         }
+    }
+}
+
+async function verifyAdminUser(username, password) {
+    try {
+        const adminUser = await prisma.adminUser.findUnique({
+            where: {
+                username: username,
+            },
+        });
+        if (
+            !adminUser ||
+            !(await bcrypt.compare(adminUser.password, password))
+        ) {
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error("Error fetching the admin user:", error);
+        throw new Error("Failed to fetch the admin user");
     }
 }
 
@@ -156,4 +177,5 @@ module.exports = {
     deletePost,
     getCommentsByPostId,
     postComment,
+    verifyAdminUser,
 };
