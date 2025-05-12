@@ -147,6 +147,11 @@ async function login(req, res) {
     }
 }
 
+async function logout(req, res) {
+    // Invalidate the token on the client side
+    res.status(200).json({ message: "Logout successfully" });
+}
+
 module.exports = {
     fetchAllPosts,
     fetchPostById,
@@ -158,4 +163,5 @@ module.exports = {
     fetchCommentsByPostId,
     createComment,
     login,
+    logout,
 };
