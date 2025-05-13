@@ -18,7 +18,7 @@ async function getPostById(id) {
     try {
         const post = await prisma.post.findMany({
             where: {
-                id: id,
+                id,
                 published: true,
             },
         });
@@ -36,8 +36,9 @@ async function postPost(title, content) {
         try {
             await prisma.post.create({
                 data: {
-                    title: title,
-                    content: content,
+                    title,
+                    content,
+                    tags,
                     published: false,
                 },
             });
@@ -52,7 +53,7 @@ async function publishPost(id) {
     try {
         await prisma.post.update({
             where: {
-                id: id,
+                id,
             },
             data: {
                 published: true,
@@ -68,7 +69,7 @@ async function unpublishPost(id) {
     try {
         await prisma.post.update({
             where: {
-                id: id,
+                id,
             },
             data: {
                 published: false,
@@ -87,11 +88,12 @@ async function putPost(id, title, content) {
         try {
             await prisma.post.update({
                 where: {
-                    id: id,
+                    id,
                 },
                 data: {
-                    title: title,
-                    content: content,
+                    title,
+                    content,
+                    tags,
                 },
             });
         } catch (error) {
@@ -105,7 +107,7 @@ async function deletePost(id) {
     try {
         await prisma.post.delete({
             where: {
-                id: id,
+                id,
             },
         });
     } catch (error) {
@@ -114,11 +116,26 @@ async function deletePost(id) {
     }
 }
 
+async function getPostByTag(tag) {
+    return await prisma.post.findMany({
+        where: { tags: { has: tag } },
+    });
+}
+
+async function getAllTags() {
+    const posts = await prisma.post.findMany({
+        select: { tags: true },
+    });
+
+    const allTags = [...new Set(posts.flatMap((post) => post.tags))];
+    return allTags;
+}
+
 async function getCommentsByPostId(postId) {
     try {
         const comments = await prisma.comment.findMany({
             where: {
-                postId: postId,
+                postId,
             },
         });
         return comments;
@@ -135,9 +152,9 @@ async function postComment(postId, author, content) {
         try {
             await prisma.comment.create({
                 data: {
-                    author: author,
-                    content: content,
-                    postId: postId,
+                    author,
+                    content,
+                    postId,
                 },
             });
         } catch (error) {
@@ -151,7 +168,7 @@ async function verifyAdminUser(username, password) {
     try {
         const adminUser = await prisma.adminUser.findUnique({
             where: {
-                username: username,
+                username,
             },
         });
         if (
@@ -175,6 +192,8 @@ module.exports = {
     unpublishPost,
     putPost,
     deletePost,
+    getPostByTag,
+    getAllTags,
     getCommentsByPostId,
     postComment,
     verifyAdminUser,

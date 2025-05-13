@@ -23,6 +23,7 @@ const validatePost = [
         .notEmpty()
         .isLength({ min: 1, max: 30 })
         .withMessage(`Post title ${titleLengthErr}`),
+    body("tags").isArray().withMessage("Tags must be an array"),
     body("content").trim().notEmpty().withMessage("Content is required"),
 ];
 
@@ -35,8 +36,18 @@ const validateComment = [
     body("content").trim().notEmpty().withMessage("Content is required"),
 ];
 
+const validateTagSearch = [
+    body("tag")
+        .trim()
+        .notEmpty()
+        .withMessage("Tag is required")
+        .isArray()
+        .withMessage("Tags must be an array"),
+];
+
 module.exports = {
     validateSignIn,
     validatePost,
     validateComment,
+    validateTagSearch,
 };

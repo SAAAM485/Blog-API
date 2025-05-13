@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const blogController = require("../controllers/blogController");
-const { validatePost, validateComment } = require("../controllers/validation");
+const {
+    validateTagSearch,
+    validateComment,
+} = require("../controllers/validation");
 
 router.get("/", blogController.fetchAllPosts);
 router.get("/blogs/:id", blogController.fetchPostById);
@@ -11,5 +14,7 @@ router.post(
     validateComment,
     blogController.createComment
 );
+router.get("/tags/:tag", validateTagSearch, blogController.fetchPostsByTag);
+router.get("/tags", blogController.fetchAllTags);
 
 module.exports = router;

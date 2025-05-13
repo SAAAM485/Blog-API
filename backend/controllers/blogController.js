@@ -14,7 +14,7 @@ async function fetchAllPosts(req, res) {
 async function fetchPostById(req, res) {
     const { id } = req.params;
     try {
-        const post = await db.getPostById(id);
+        const post = await db.getPostById(parseInt(id));
         if (post) {
             res.status(200).json(post);
         } else {
@@ -32,10 +32,10 @@ async function createPost(req, res) {
         return res.status(422).json({ errors: errors.array() });
     }
 
-    const { title, content } = req.body;
+    const { title, content, tags } = req.body;
 
     try {
-        await db.postPost(title, content);
+        await db.postPost(title, content, tags || []);
         res.status(201).json({ message: "Post created successfully" });
     } catch (error) {
         console.error("Error creating post:", error);
@@ -46,7 +46,7 @@ async function createPost(req, res) {
 async function unveilPost(req, res) {
     const { id } = req.params;
     try {
-        await db.publishPost(id);
+        await db.publishPost(parseInt(id));
         res.status(200).json({ message: "Post published successfully" });
     } catch (error) {
         console.error("Error publishing post:", error);
@@ -57,7 +57,7 @@ async function unveilPost(req, res) {
 async function hidePost(req, res) {
     const { id } = req.params;
     try {
-        await db.unpublishPost(id);
+        await db.unpublishPost(parseInt(id));
         res.status(200).json({ message: "Post unpublished successfully" });
     } catch (error) {
         console.error("Error unpublishing post:", error);
@@ -71,10 +71,10 @@ async function updatePost(req, res) {
         return res.status(422).json({ errors: errors.array() });
     }
     const { id } = req.params;
-    const { title, content } = req.body;
+    const { title, content, tags } = req.body;
 
     try {
-        await db.updatePost(id, title, content);
+        await db.updatePost(parseInt(id), title, content, tags || []);
         res.status(200).json({ message: "Post updated successfully" });
     } catch (error) {
         console.error("Error updating post:", error);
@@ -86,7 +86,7 @@ async function deletePost(req, res) {
     const { id } = req.params;
 
     try {
-        await db.deletePost(id);
+        await db.deletePost(parseInt(id));
         res.status(200).json({ message: "Post deleted successfully" });
     } catch (error) {
         console.error("Error deleting post:", error);
@@ -94,10 +94,31 @@ async function deletePost(req, res) {
     }
 }
 
+async function fetchPostByTag(req, res) {
+    const { tag } = req.params;
+    try {
+        const posts = await db.getPostsByTag(tag);
+        res.status(200).json(posts.length > 0 ? posts : []);
+    } catch (error) {
+        console.error("Error fetching posts by tag:", error);
+        res.status(500).json({ error: "Failed to fetch posts by tag" });
+    }
+}
+
+async function fetchAllTags(req, res) {
+    try {
+        const tags = await db.getAllTags();
+        res.status(200).json(tags);
+    } catch (error) {
+        console.error("Error fetching tags:", error);
+        res.status(500).json({ error: "Failed to fetch tags" });
+    }
+}
+
 async function fetchCommentsByPostId(req, res) {
     const { postId } = req.params;
     try {
-        const comments = await db.getCommentsByPostId(postId);
+        const comments = await db.getCommentsByPostId(parseInt(postId));
         res.status(200).json(comments.length > 0 ? comments : []);
     } catch (error) {
         console.error("Error fetching comments:", error);
@@ -114,7 +135,7 @@ async function createComment(req, res) {
     const { author, content } = req.body;
 
     try {
-        await db.postComment(postId, author, content);
+        await db.postComment(parseInt(postId), author, content);
         res.status(201).json({ message: "Comment created successfully" });
     } catch (error) {
         console.error("Error creating comment:", error);
@@ -160,6 +181,8 @@ module.exports = {
     hidePost,
     updatePost,
     deletePost,
+    fetchPostByTag,
+    fetchAllTags,
     fetchCommentsByPostId,
     createComment,
     login,

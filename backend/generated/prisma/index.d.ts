@@ -1113,6 +1113,7 @@ export namespace Prisma {
     id: number
     title: number
     content: number
+    tags: number
     published: number
     createdAt: number
     updatedAt: number
@@ -1142,6 +1143,7 @@ export namespace Prisma {
     id?: true
     title?: true
     content?: true
+    tags?: true
     published?: true
     createdAt?: true
     updatedAt?: true
@@ -1224,6 +1226,7 @@ export namespace Prisma {
     id: string
     title: string
     content: string
+    tags: string[]
     published: boolean
     createdAt: Date
     updatedAt: Date
@@ -1250,6 +1253,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    tags?: boolean
     published?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1261,6 +1265,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    tags?: boolean
     published?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1270,6 +1275,7 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    tags?: boolean
     published?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1279,12 +1285,13 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     content?: boolean
+    tags?: boolean
     published?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "tags" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     comments?: boolean | Post$commentsArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
@@ -1301,6 +1308,7 @@ export namespace Prisma {
       id: string
       title: string
       content: string
+      tags: string[]
       published: boolean
       createdAt: Date
       updatedAt: Date
@@ -1731,6 +1739,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Post", 'String'>
     readonly title: FieldRef<"Post", 'String'>
     readonly content: FieldRef<"Post", 'String'>
+    readonly tags: FieldRef<"Post", 'String[]'>
     readonly published: FieldRef<"Post", 'Boolean'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
     readonly updatedAt: FieldRef<"Post", 'DateTime'>
@@ -4209,6 +4218,7 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     content: 'content',
+    tags: 'tags',
     published: 'published',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -4317,6 +4327,7 @@ export namespace Prisma {
     id?: StringFilter<"Post"> | string
     title?: StringFilter<"Post"> | string
     content?: StringFilter<"Post"> | string
+    tags?: StringNullableListFilter<"Post">
     published?: BoolFilter<"Post"> | boolean
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
@@ -4327,6 +4338,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    tags?: SortOrder
     published?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4340,6 +4352,7 @@ export namespace Prisma {
     NOT?: PostWhereInput | PostWhereInput[]
     title?: StringFilter<"Post"> | string
     content?: StringFilter<"Post"> | string
+    tags?: StringNullableListFilter<"Post">
     published?: BoolFilter<"Post"> | boolean
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
@@ -4350,6 +4363,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    tags?: SortOrder
     published?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4365,6 +4379,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Post"> | string
     title?: StringWithAggregatesFilter<"Post"> | string
     content?: StringWithAggregatesFilter<"Post"> | string
+    tags?: StringNullableListFilter<"Post">
     published?: BoolWithAggregatesFilter<"Post"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
@@ -4471,6 +4486,7 @@ export namespace Prisma {
     id?: string
     title: string
     content: string
+    tags?: PostCreatetagsInput | string[]
     published?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4481,6 +4497,7 @@ export namespace Prisma {
     id?: string
     title: string
     content: string
+    tags?: PostCreatetagsInput | string[]
     published?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4491,6 +4508,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    tags?: PostUpdatetagsInput | string[]
     published?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4501,6 +4519,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    tags?: PostUpdatetagsInput | string[]
     published?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4511,6 +4530,7 @@ export namespace Prisma {
     id?: string
     title: string
     content: string
+    tags?: PostCreatetagsInput | string[]
     published?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4520,6 +4540,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    tags?: PostUpdatetagsInput | string[]
     published?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4529,6 +4550,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    tags?: PostUpdatetagsInput | string[]
     published?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4646,6 +4668,14 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -4676,6 +4706,7 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrder
+    tags?: SortOrder
     published?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4786,6 +4817,10 @@ export namespace Prisma {
     password?: SortOrder
   }
 
+  export type PostCreatetagsInput = {
+    set: string[]
+  }
+
   export type CommentCreateNestedManyWithoutPostInput = {
     create?: XOR<CommentCreateWithoutPostInput, CommentUncheckedCreateWithoutPostInput> | CommentCreateWithoutPostInput[] | CommentUncheckedCreateWithoutPostInput[]
     connectOrCreate?: CommentCreateOrConnectWithoutPostInput | CommentCreateOrConnectWithoutPostInput[]
@@ -4802,6 +4837,11 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type PostUpdatetagsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -4989,6 +5029,7 @@ export namespace Prisma {
     id?: string
     title: string
     content: string
+    tags?: PostCreatetagsInput | string[]
     published?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4998,6 +5039,7 @@ export namespace Prisma {
     id?: string
     title: string
     content: string
+    tags?: PostCreatetagsInput | string[]
     published?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5023,6 +5065,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    tags?: PostUpdatetagsInput | string[]
     published?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5032,6 +5075,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    tags?: PostUpdatetagsInput | string[]
     published?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
