@@ -39,7 +39,7 @@
     {/if}
     
     <h3>Leave a Comment</h3>
-    <input type="text" bind:value="{newComment.username}" placeholder="Your Name" />
-    <textarea bind:value="{newComment.content}" placeholder="Your Comment"></textarea>
-    <button on:click="{submitComment}">Submit</button>
+    <input type="text" bind:value={newComment.author} placeholder="Your Name" />
+    <textarea bind:value={newComment.content} placeholder="Your Comment"></textarea>
+    <button on:click={submitComment}>Submit</button>
 </main>

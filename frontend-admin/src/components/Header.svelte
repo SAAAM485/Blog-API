@@ -1,5 +1,19 @@
 <script>
     import { Link } from "svelte-routing";
+    import { logout, userStore } from "../stores/userStore";
+
+    async function submitLogout() {
+        try {
+            await logout();
+            if (!$userStore.isLoggedIn) {
+                console.log("Logout successful");
+            } else {
+                console.error("Logout failed");
+            }
+        } catch (error) {
+            console.error("Error during logout:", error);
+        }
+    }
 </script>
 
 <header>
@@ -16,6 +30,7 @@
         <Link to="/tags">
             <button>Tags</button>
         </Link>
+        <button on:click={submitLogout}>Logout</button>
     </nav>
 </header>
 

@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:3000/api";
+const API_BASE_URL = "http://localhost:3000/api/client";
 
 // 取得所有文章
 export async function getPosts() {
@@ -20,7 +20,7 @@ export async function getCommentsByPostId(postId) {
 
 // 使用標籤搜尋文章
 export async function getPostsByTag(tag) {
-    const response = await fetch(`http://localhost:3000/tags/${tag}`);
+    const response = await fetch(`${API_BASE_URL}/tags/${tag}`);
     return await response.json();
 }
 
@@ -35,7 +35,7 @@ export async function addComment(postId, author, content) {
     const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ postId, author, content }), // ✅ 確保符合後端所需格式
+        body: JSON.stringify({ author, content }), // ✅ 確保符合後端所需格式
     });
     return await response.json();
 }
