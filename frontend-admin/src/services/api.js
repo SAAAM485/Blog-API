@@ -1,10 +1,23 @@
 const API_BASE_URL = "http://localhost:3000/api";
 
 // 取得所有文章
-export async function getPosts() {
-    const response = await fetch(`${API_BASE_URL}/client`);
+export async function getAllPosts() {
+    const response = await fetch(`${API_BASE_URL}/admin/blogs`);
     return await response.json();
 }
+
+// 取得所有已發布文章
+export async function getPublishedPosts() {
+    const response = await fetch(`${API_BASE_URL}/client/blogs`);
+    return await response.json();
+}
+
+// 取得所有未發布文章
+export async function getUnpublishedPosts() {
+    const response = await fetch(`${API_BASE_URL}/admin/blogs/unpublished`);
+    return await response.json();
+}
+
 // 取得單篇文章
 export async function getPostById(postId) {
     const response = await fetch(`${API_BASE_URL}/client/blogs/${postId}`);
@@ -58,15 +71,41 @@ export async function deletePost(postId) {
     return await response.json();
 }
 
-// 使用標籤搜尋文章
-export async function getPostsByTag(tag) {
+// 使用標籤搜尋已發布文章
+export async function getPublishedPostsByTag(tag) {
     const response = await fetch(`${API_BASE_URL}/client/tags/${tag}`);
+    return await response.json();
+}
+
+// 取得所有已發布標籤
+export async function getAllPublishedTags() {
+    const response = await fetch(`${API_BASE_URL}/client/tags`);
+    return await response.json();
+}
+
+// 使用標籤搜尋未發布文章
+export async function getUnpublishedPostsByTag(tag) {
+    const response = await fetch(
+        `${API_BASE_URL}/admin/tags/unpublished/${tag}`
+    );
+    return await response.json();
+}
+
+// 取得所有未發布標籤
+export async function getAllUnpublishedTags() {
+    const response = await fetch(`${API_BASE_URL}/admin/tags/unpublished`);
+    return await response.json();
+}
+
+// 使用標籤搜尋所有文章
+export async function getPostsByTag(tag) {
+    const response = await fetch(`${API_BASE_URL}/admin/tags/${tag}`);
     return await response.json();
 }
 
 // 取得所有標籤
 export async function getAllTags() {
-    const response = await fetch(`${API_BASE_URL}/client/tags`);
+    const response = await fetch(`${API_BASE_URL}/admin/tags`);
     return await response.json();
 }
 

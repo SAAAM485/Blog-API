@@ -13,5 +13,9 @@ router.post("/blogs/:id/publish", blogController.unveilPost);
 router.post("/blogs/:id/unpublish", blogController.hidePost);
 router.put("/blogs/:id", validatePost, blogController.updatePost);
 router.delete("/blogs/:id", blogController.deletePost);
+router.get("tags", blogController.fetchAllTags);
+router.get("tags/:tag", blogController.fetchPostsByTag);
+router.get("tags/unpublished", blogController.fetchAllUnpublishedTags);
+router.get("tags/unpublished/:tag", blogController.fetchUnpublishedPostsByTag);
 
 module.exports = router;

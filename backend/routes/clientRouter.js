@@ -6,7 +6,7 @@ const {
     validateComment,
 } = require("../controllers/validation");
 
-router.get("/", blogController.fetchPublishedPosts);
+router.get("/blogs", blogController.fetchPublishedPosts);
 router.get("/blogs/:id", blogController.fetchPostById);
 router.get("/blogs/:id/comments", blogController.fetchCommentsByPostId);
 router.post(
@@ -14,7 +14,11 @@ router.post(
     validateComment,
     blogController.createComment
 );
-router.get("/tags/:tag", validateTagSearch, blogController.fetchPostsByTag);
-router.get("/tags", blogController.fetchAllTags);
+router.get(
+    "/tags/:tag",
+    validateTagSearch,
+    blogController.fetchPublishedPostsByTag
+);
+router.get("/tags", blogController.fetchAllPublishedTags);
 
 module.exports = router;

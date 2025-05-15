@@ -140,19 +140,54 @@ async function deletePost(id) {
     }
 }
 
-async function getPostByTag(tag) {
+async function getPublishedPostByTag(tag) {
     return await prisma.post.findMany({
-        where: { tags: { has: tag } },
+        where: {
+            where: { published: true },
+            tags: { has: tag },
+        },
     });
 }
 
-async function getAllTags() {
+async function getAllPublishedTags() {
     const posts = await prisma.post.findMany({
+        where: { published: true },
         select: { tags: true },
     });
 
     const allTags = [...new Set(posts.flatMap((post) => post.tags))];
     return allTags;
+}
+
+async function getUnpublishedPostsByTag(tag) {
+    return await prisma.post.findMany({
+        where: {
+            published: false,
+            tags: { has: tag },
+        },
+    });
+}
+
+async function getAllUnpublishedTags() {
+    const posts = await prisma.post.findMany({
+        where: { published: false },
+        select: { tags: true },
+    });
+
+    const allTags = [...new Set(posts.flatMap((post) => post.tags))];
+    return allTags;
+}
+
+async function getAllPostsByTag(tag) {
+    const publishedPosts = await getPublishedPostByTag(tag);
+    const unpublishedPosts = await getUnpublishedPostsByTag(tag);
+    return [...publishedPosts, ...unpublishedPosts];
+}
+
+async function getAllTags() {
+    const publishedTags = await getAllPublishedTags();
+    const unpublishedTags = await getAllUnpublishedTags();
+    return [...new Set([...publishedTags, ...unpublishedTags])];
 }
 
 async function getCommentsByPostId(postId) {
@@ -209,14 +244,20 @@ async function verifyAdminUser(username, password) {
 }
 
 module.exports = {
-    getBlogPosts,
+    getAllPosts,
+    getPublishedPosts,
+    getUnpublishedPosts,
     getPostById,
     postPost,
     publishPost,
     unpublishPost,
     putPost,
     deletePost,
-    getPostByTag,
+    getPublishedPostByTag,
+    getAllPublishedTags,
+    getUnpublishedPostsByTag,
+    getAllUnpublishedTags,
+    getAllPostsByTag,
     getAllTags,
     getCommentsByPostId,
     postComment,

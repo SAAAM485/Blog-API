@@ -1,12 +1,13 @@
 <script>
     import { onMount } from "svelte";
-    import { getPosts } from "../services/api.js";
-    import { Link } from "svelte-routing"; // ✅ 使用 Svelte Routing
+    import { getPublishedPosts } from "../services/api.js";
+    import { Link } from "svelte-routing";
+    import { formatDate } from "../utils/formatDate.js";
 
     let posts = [];
 
     onMount(async () => {
-        posts = await getPosts();
+        posts = await getPublishedPosts();
         posts.reverse();
     });
 </script>
@@ -20,6 +21,10 @@
                 <h2>
                     <Link to="/post/{post.id}">{post.title}</Link> <!-- ✅ 使用 Link -->
                 </h2>
+                <p>Posted at: {formatDate(post.createdAt)}</p>
+                {#if post.updatedAt}
+                  <p>Updated at: {formatDate(post.updatedAt)}</p>
+                {/if}
                 <p>{post.content}</p>
             </article>
         {/each}

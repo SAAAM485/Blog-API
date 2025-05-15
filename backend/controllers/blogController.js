@@ -114,10 +114,54 @@ async function deletePost(req, res) {
     }
 }
 
-async function fetchPostByTag(req, res) {
+async function fetchPublishedPostsByTag(req, res) {
     const { tag } = req.params;
     try {
-        const posts = await db.getPostsByTag(tag);
+        const posts = await db.getPublishedPostsByTag(tag);
+        res.status(200).json(posts.length > 0 ? posts : []);
+    } catch (error) {
+        console.error("Error fetching posts by tag:", error);
+        res.status(500).json({ error: "Failed to fetch posts by tag" });
+    }
+}
+
+async function fetchAllPublishedTags(req, res) {
+    try {
+        const tags = await db.getAllPublishedTags();
+        res.status(200).json(tags);
+    } catch (error) {
+        console.error("Error fetching tags:", error);
+        res.status(500).json({ error: "Failed to fetch tags" });
+    }
+}
+
+async function fetchUnpublishedPostsByTag(req, res) {
+    const { tag } = req.params;
+    try {
+        const posts = await db.getUnpublishedPostsByTag(tag);
+        res.status(200).json(posts.length > 0 ? posts : []);
+    } catch (error) {
+        console.error("Error fetching unpublished posts by tag:", error);
+        res.status(500).json({
+            error: "Failed to fetch unpublished posts by tag",
+        });
+    }
+}
+
+async function fetchAllUnpublishedTags(req, res) {
+    try {
+        const tags = await db.getAllUnpublishedTags();
+        res.status(200).json(tags);
+    } catch (error) {
+        console.error("Error fetching unpublished tags:", error);
+        res.status(500).json({ error: "Failed to fetch unpublished tags" });
+    }
+}
+
+async function fetchPostsByTag(req, res) {
+    const { tag } = req.params;
+    try {
+        const posts = await db.getAllPostsByTag(tag);
         res.status(200).json(posts.length > 0 ? posts : []);
     } catch (error) {
         console.error("Error fetching posts by tag:", error);
@@ -127,11 +171,12 @@ async function fetchPostByTag(req, res) {
 
 async function fetchAllTags(req, res) {
     try {
-        const tags = await db.getAllTags();
-        res.status(200).json(tags);
+        const publishedTags = await db.getAllPublishedTags();
+        const unpublishedTags = await db.getAllUnpublishedTags();
+        res.status(200).json({ publishedTags, unpublishedTags });
     } catch (error) {
-        console.error("Error fetching tags:", error);
-        res.status(500).json({ error: "Failed to fetch tags" });
+        console.error("Error fetching all tags:", error);
+        res.status(500).json({ error: "Failed to fetch all tags" });
     }
 }
 
@@ -203,7 +248,11 @@ module.exports = {
     hidePost,
     updatePost,
     deletePost,
-    fetchPostByTag,
+    fetchPublishedPostsByTag,
+    fetchAllPublishedTags,
+    fetchUnpublishedPostsByTag,
+    fetchAllUnpublishedTags,
+    fetchPostsByTag,
     fetchAllTags,
     fetchCommentsByPostId,
     createComment,
