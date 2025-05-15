@@ -6,6 +6,8 @@ const { validatePost } = require("../controllers/validation");
 
 router.use(verifyToken);
 
+router.get("/blogs", blogController.fetchAllPosts);
+router.get("/blogs/unpublished", blogController.fetchUnpublishedPosts);
 router.post("/blogs", validatePost, blogController.createPost);
 router.post("/blogs/:id/publish", blogController.unveilPost);
 router.post("/blogs/:id/unpublish", blogController.hidePost);

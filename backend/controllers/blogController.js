@@ -3,11 +3,31 @@ const { validationResult } = require("express-validator");
 
 async function fetchAllPosts(req, res) {
     try {
-        const posts = await db.getBlogPosts();
+        const posts = await db.getAllPosts();
         res.status(200).json(posts);
     } catch (error) {
         console.error("Error fetching posts:", error);
         res.status(500).json({ error: "Failed to fetch posts" });
+    }
+}
+
+async function fetchPublishedPosts(req, res) {
+    try {
+        const posts = await db.getPublishedPosts();
+        res.status(200).json(posts.length > 0 ? posts : []);
+    } catch (error) {
+        console.error("Error fetching published posts:", error);
+        res.status(500).json({ error: "Failed to fetch published posts" });
+    }
+}
+
+async function fetchUnpublishedPosts(req, res) {
+    try {
+        const posts = await db.getUnpublishedPosts();
+        res.status(200).json(posts.length > 0 ? posts : []);
+    } catch (error) {
+        console.error("Error fetching unpublished posts:", error);
+        res.status(500).json({ error: "Failed to fetch unpublished posts" });
     }
 }
 
@@ -175,6 +195,8 @@ async function logout(req, res) {
 
 module.exports = {
     fetchAllPosts,
+    fetchPublishedPosts,
+    fetchUnpublishedPosts,
     fetchPostById,
     createPost,
     unveilPost,

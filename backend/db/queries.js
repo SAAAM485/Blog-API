@@ -1,10 +1,34 @@
 const prisma = require("./client");
 
-async function getBlogPosts() {
+async function getAllPosts() {
+    try {
+        const posts = await prisma.post.findMany();
+        return posts;
+    } catch (error) {
+        console.error("Error fetching the posts:", error);
+        throw new Error("Failed to fetch the posts");
+    }
+}
+
+async function getPublishedPosts() {
     try {
         const posts = await prisma.post.findMany({
             where: {
                 published: true,
+            },
+        });
+        return posts;
+    } catch (error) {
+        console.error("Error fetching the posts:", error);
+        throw new Error("Failed to fetch the posts");
+    }
+}
+
+async function getUnpublishedPosts() {
+    try {
+        const posts = await prisma.post.findMany({
+            where: {
+                published: false,
             },
         });
         return posts;

@@ -6,7 +6,7 @@ const {
     validateComment,
 } = require("../controllers/validation");
 
-router.get("/", blogController.fetchAllPosts);
+router.get("/", blogController.fetchPublishedPosts);
 router.get("/blogs/:id", blogController.fetchPostById);
 router.get("/blogs/:id/comments", blogController.fetchCommentsByPostId);
 router.post(
