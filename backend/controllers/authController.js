@@ -5,7 +5,7 @@ async function login(req, res) {
     const { username, password } = req.body;
 
     try {
-        const user = await verifyAdminUser(username, password);
+        const user = await db.verifyAdminUser(username, password);
 
         if (!user) {
             return res

@@ -53,8 +53,8 @@ async function getPostById(id) {
     }
 }
 
-async function postPost(title, content) {
-    if (!post.title || !post.content) {
+async function postPost(title, content, tags) {
+    if (!title || !content) {
         throw new Error("Title and content are required");
     } else {
         try {
@@ -105,7 +105,7 @@ async function unpublishPost(id) {
     }
 }
 
-async function putPost(id, title, content) {
+async function putPost(id, title, content, tags) {
     if (!title || !content) {
         throw new Error("Title and content are required");
     } else {
@@ -143,7 +143,7 @@ async function deletePost(id) {
 async function getPublishedPostsByTag(tag) {
     return await prisma.post.findMany({
         where: {
-            where: { published: true },
+            published: true,
             tags: { has: tag },
         },
     });
@@ -205,8 +205,8 @@ async function getCommentsByPostId(postId) {
 }
 
 async function postComment(postId, author, content) {
-    if (!comment.content) {
-        throw new Error("Content is required");
+    if (!content || !author) {
+        throw new Error("Content and author is required");
     } else {
         try {
             await prisma.comment.create({
@@ -223,6 +223,8 @@ async function postComment(postId, author, content) {
     }
 }
 
+const bcrypt = require("bcryptjs");
+
 async function verifyAdminUser(username, password) {
     try {
         const adminUser = await prisma.adminUser.findUnique({
@@ -232,7 +234,7 @@ async function verifyAdminUser(username, password) {
         });
         if (
             !adminUser ||
-            !(await bcrypt.compare(adminUser.password, password))
+            !(await bcrypt.compare(password, adminUser.password))
         ) {
             return false;
         }
@@ -256,17 +258,23 @@ async function createImage(url) {
     });
 }
 
-const getAllImages = async () => {
+async function getImageById(id) {
+    return await prisma.image.findUnique({
+        where: { id },
+    });
+}
+
+async function getAllImages() {
     return await prisma.image.findMany({
         orderBy: { createdAt: "asc" },
     });
-};
+}
 
-const deleteImageById = async (id) => {
+async function deleteImageById(id) {
     return await prisma.image.delete({
         where: { id },
     });
-};
+}
 
 module.exports = {
     getAllPosts,
@@ -278,7 +286,7 @@ module.exports = {
     unpublishPost,
     putPost,
     deletePost,
-    getPublishedPostByTag: getPublishedPostsByTag,
+    getPublishedPostsByTag,
     getAllPublishedTags,
     getUnpublishedPostsByTag,
     getAllUnpublishedTags,
@@ -288,6 +296,7 @@ module.exports = {
     postComment,
     verifyAdminUser,
     createImage,
+    getImageById,
     getAllImages,
     deleteImageById,
 };

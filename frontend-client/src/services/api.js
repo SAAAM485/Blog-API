@@ -39,3 +39,14 @@ export async function addComment(postId, author, content) {
     });
     return await response.json();
 }
+
+// 獲取圖片
+export async function fetchImages() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/images`);
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching images:", error);
+        return [];
+    }
+}

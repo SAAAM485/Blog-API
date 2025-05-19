@@ -165,3 +165,56 @@ export async function fetchWithAuth(url, options = {}) {
     };
     return fetch(url, { ...options, headers });
 }
+
+// 獲取圖片
+export async function fetchImages() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/client/images`);
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching images:", error);
+        return [];
+    }
+}
+
+// 上傳圖片
+export async function uploadImages(files) {
+    const formData = new FormData();
+    for (const file of files) {
+        formData.append("images", file);
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/admin/images`, {
+            method: "POST",
+            body: formData,
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error uploading images:", error);
+        return null;
+    }
+}
+
+// 刪除圖片
+export async function deleteImage(imageId) {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/admin/images/${imageId}`,
+            {
+                method: "DELETE",
+            }
+        );
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Failed to delete image: ${errorMessage}`);
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Error deleting image:", error.message);
+        return false;
+    }
+}

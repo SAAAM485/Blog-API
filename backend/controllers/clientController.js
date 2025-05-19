@@ -14,7 +14,7 @@ async function fetchPublishedPosts(req, res) {
 async function fetchPostById(req, res) {
     const { id } = req.params;
     try {
-        const post = await db.getPostById(parseInt(id));
+        const post = await db.getPostById(id);
         if (post) {
             res.status(200).json(post);
         } else {
@@ -48,9 +48,9 @@ async function fetchAllPublishedTags(req, res) {
 }
 
 async function fetchCommentsByPostId(req, res) {
-    const { postId } = req.params;
+    const { id } = req.params;
     try {
-        const comments = await db.getCommentsByPostId(parseInt(postId));
+        const comments = await db.getCommentsByPostId(id);
         res.status(200).json(comments.length > 0 ? comments : []);
     } catch (error) {
         console.error("Error fetching comments:", error);
@@ -63,11 +63,11 @@ async function createComment(req, res) {
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
-    const { postId } = req.params;
+    const { id } = req.params;
     const { author, content } = req.body;
 
     try {
-        await db.postComment(parseInt(postId), author, content);
+        await db.postComment(id, author, content);
         res.status(201).json({ message: "Comment created successfully" });
     } catch (error) {
         console.error("Error creating comment:", error);

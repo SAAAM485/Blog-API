@@ -27,7 +27,7 @@ async function uploadImages(req, res) {
     }
 }
 
-// 更新圖片排序
+// 獲取所有圖片
 async function fetchAllImages(req, res) {
     try {
         const images = await db.getAllImages();
@@ -43,13 +43,18 @@ async function fetchAllImages(req, res) {
 // 刪除圖片
 async function deleteImage(req, res) {
     try {
-        const { imageId } = req.params;
-        const image = await db.findImageById(imageId);
+        const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ message: "Image ID is required" });
+        }
+        // 先查詢資料庫中是否有此圖片記錄
+        const image = await db.getImageById(id);
         if (!image) {
             return res.status(404).json({ message: "Image not found" });
         }
-        await db.deleteImageById(imageId);
-        // 從檔案系統中刪除實體檔案
+        // 從資料庫中刪除
+        await db.deleteImageById(id);
+        // 從檔案系統中刪除檔案，這裡假設你的圖片 URL 為 "/uploads/<filename>"
         const filePath = path.join(
             __dirname,
             "../uploads",

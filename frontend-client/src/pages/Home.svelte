@@ -1,20 +1,31 @@
 <script>
-    let images = ["../assets/images/photo1.jpg", "../assets/images/photo2.jpg", "../assets/images/photo3.jpg"];
+    import { onMount } from "svelte";
+    import { fetchImages } from "../services/api";
+
+    let images = [];
+
+    onMount(async () => {
+        images = await fetchImages();
+    });
 </script>
 
 <main>
     <h1>Welcome to My Blog</h1>
     <div class="gallery">
-        {#each images as img}
-            <img src="{img}" alt="Blog Photo">
+        {#each images as image}
+          <img src="{image.url}" alt="{image.id}">
         {/each}
-    </div>
+      </div>
 </main>
 
 <style>
-    .gallery img {
-        width: 100%;
-        max-width: 300px;
-        margin: 10px;
+    .gallery {
+      display: flex;
+      overflow: hidden;
+      width: 100%;
+      gap: 10px;
     }
-</style>
+    .gallery img {
+      max-width: 250px;
+    }
+  </style>
