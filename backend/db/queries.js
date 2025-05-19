@@ -140,7 +140,7 @@ async function deletePost(id) {
     }
 }
 
-async function getPublishedPostByTag(tag) {
+async function getPublishedPostsByTag(tag) {
     return await prisma.post.findMany({
         where: {
             where: { published: true },
@@ -179,7 +179,7 @@ async function getAllUnpublishedTags() {
 }
 
 async function getAllPostsByTag(tag) {
-    const publishedPosts = await getPublishedPostByTag(tag);
+    const publishedPosts = await getPublishedPostsByTag(tag);
     const unpublishedPosts = await getUnpublishedPostsByTag(tag);
     return [...publishedPosts, ...unpublishedPosts];
 }
@@ -243,6 +243,31 @@ async function verifyAdminUser(username, password) {
     }
 }
 
+/**
+ * 建立圖片。若 blogId 有值，則建立關聯（根據你的模型設定，可自行調整）。
+ * @param {string} url - 圖片 URL
+ * @param {number} order - 圖片排序（預設為 0）
+ * @param {string} [blogId] - 文章 ID，如果圖片與文章關聯
+ * @returns {Promise<object>} - 新建立的 image 資料
+ */
+async function createImage(url) {
+    return await prisma.image.create({
+        data: { url },
+    });
+}
+
+const getAllImages = async () => {
+    return await prisma.image.findMany({
+        orderBy: { createdAt: "asc" },
+    });
+};
+
+const deleteImageById = async (id) => {
+    return await prisma.image.delete({
+        where: { id },
+    });
+};
+
 module.exports = {
     getAllPosts,
     getPublishedPosts,
@@ -253,7 +278,7 @@ module.exports = {
     unpublishPost,
     putPost,
     deletePost,
-    getPublishedPostByTag,
+    getPublishedPostByTag: getPublishedPostsByTag,
     getAllPublishedTags,
     getUnpublishedPostsByTag,
     getAllUnpublishedTags,
@@ -262,4 +287,7 @@ module.exports = {
     getCommentsByPostId,
     postComment,
     verifyAdminUser,
+    createImage,
+    getAllImages,
+    deleteImageById,
 };

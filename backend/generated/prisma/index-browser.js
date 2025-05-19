@@ -144,6 +144,12 @@ exports.Prisma.AdminUserScalarFieldEnum = {
   password: 'password'
 };
 
+exports.Prisma.ImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -158,7 +164,8 @@ exports.Prisma.QueryMode = {
 exports.Prisma.ModelName = {
   Post: 'Post',
   Comment: 'Comment',
-  AdminUser: 'AdminUser'
+  AdminUser: 'AdminUser',
+  Image: 'Image'
 };
 
 /**
