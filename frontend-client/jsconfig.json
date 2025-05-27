@@ -32,6 +32,12 @@
         "src/**/*.d.ts",
         "src/**/*.js",
         "src/**/*.svelte",
-        "../frontend-admin/src/pages/Login.svelte"
+        "../frontend-admin/src/pages/Login.svelte",
+        "src/utils/formatDate.ts",
+        "src/utils/formatDate.ts",
+        "src/main.ts",
+        "src/main.ts",
+        "src/services/api.ts",
+        "src/services/api.ts"
     ]
 }

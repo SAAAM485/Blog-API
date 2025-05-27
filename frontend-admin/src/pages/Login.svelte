@@ -1,13 +1,15 @@
-<script>
+<script lang="ts">
     import { login, userStore } from "../stores/userStore";
+    import { get } from "svelte/store";
   
     let username = "";
     let password = "";
   
-    async function submitLogin() {
+    async function submitLogin(): Promise<void> {
         try {
             await login(username, password);
-            if ($userStore.isLoggedIn) {
+            const user = get(userStore);
+            if (user.isLoggedIn) {
                 console.log("Login successful");
             } else {
                 console.error("Login failed");

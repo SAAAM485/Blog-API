@@ -1,21 +1,13 @@
-<script>
-    import { Link } from "svelte-routing";
+<script lang="ts">
+    import { goto } from "@mateothegreat/svelte5-router";
 </script>
 
 <header>
-    <Link to="/">
-        <button>Bagel's Blog</button>
-    </Link>
+        <button on:click|preventDefault={() => goto("/")}>Bagel's Blog</button>
     <nav>
-        <Link to="/about">
-            <button>About</button>
-        </Link>
-        <Link to="/articles">
-            <button>Articles</button>
-        </Link>
-        <Link to="/tags">
-            <button>Tags</button>
-        </Link>
+        <button  on:click|preventDefault={() => goto("/about")}>About</button>
+        <button on:click|preventDefault={() => goto("/articles")}>Articles</button>
+        <button on:click|preventDefault={() => goto("/tags")}>Tags</button>
     </nav>
 </header>
 

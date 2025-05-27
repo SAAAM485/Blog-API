@@ -1,33 +1,42 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
-  import { fetchImages, uploadImages, deleteImage } from "../services/api";
+    import { fetchImages, uploadImages, deleteImage } from "../services/api";
+    import type { Image } from "../types/Models";
 
-  let images = [];
+    let images: Image[] = [];
 
-  async function loadImages() {
-    images = await fetchImages();
-  }
-
-  async function handleUpload(event) {
-    const files = event.target.files;
-    if (files.length === 0) return;
-
-    const result = await uploadImages(files);
-    if (result) {
-      alert("圖片上傳成功！");
-      loadImages(); // 重新載入圖片
+    async function loadImages():Promise<void> {
+      images = [...await fetchImages()];
     }
-  }
 
-  async function handleDelete(imageId) {
-    const success = await deleteImage(imageId);
-    if (success) {
-      alert("圖片刪除成功！");
-      loadImages(); // 重新載入圖片
+    async function handleUpload(event: Event): Promise<void> {
+      const input = event.target as HTMLInputElement;
+      const files = input.files;
+      if (!files || files.length === 0) return;
+
+      const result = await uploadImages(Array.from(files));
+      if (result) {
+        alert("Images uploaded successfully!");
+        await loadImages();
+      }
     }
-  }
 
-  onMount(loadImages);
+    async function handleDelete(imageId: string): Promise<void> {
+      try {
+        await deleteImage(imageId);
+        alert("Image deleted successfully!");
+        await loadImages();
+      } catch (error) {
+        console.error(`Error deleting image (${imageId}):`, error);
+        alert("Error deleting image. Please try again.");
+      }
+    }
+
+
+
+    onMount(async () => {
+      await loadImages();
+    });
 </script>
 
 <main>

@@ -1,29 +1,55 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
-    import { getAllPosts, getPublishedPosts, getUnpublishedPosts } from "../services/api.js";
-    import { Link } from "svelte-routing";
-    import { formatDate } from "../utils/formatDate.js";
+    import { getAllPosts, getPublishedPosts, getUnpublishedPosts } from "../services/api";
+    import { goto } from "@mateothegreat/svelte5-router";
+    import { formatDate } from "../utils/formatDate";
+    import type { Post } from "../types/Models";
   
-    let posts = [];
+    let posts: Post[] = [];
+    let loading = true;
+
     
     async function fetchAllPosts() {
-      posts = await getAllPosts();
-      posts.reverse();
+      loading = true;
+        try {
+          const data = await getAllPosts();
+          posts = [...data].reverse();
+        } catch (error) {
+          console.error("Error fetching all posts:", error);
+          posts = []; // ✅ 發生錯誤時回傳空陣列，避免 UI 崩潰
+        }
     }
-  
+
     async function fetchPublishedPosts() {
-      posts = await getPublishedPosts();
-      posts.reverse();
+      loading = true;
+      try {
+        const data = await getPublishedPosts();
+        posts = [...data].reverse();
+      } catch (error) {
+        console.error("Error fetching published posts:", error);
+        posts = []; // ✅ 發生錯誤時回傳空陣列，避免 UI 崩潰
+      }
     }
-  
+
     async function fetchUnpublishedPosts() {
-      posts = await getUnpublishedPosts();
-      posts.reverse();
+      loading = true;
+      try {
+        const data = await getUnpublishedPosts();
+        posts = [...data].reverse();
+      } catch (error) {
+        console.error("Error fetching unpublished posts:", error);
+        posts = []; // ✅ 發生錯誤時回傳空陣列，避免 UI 崩潰
+      }
     }
-  
-    onMount(() => {
-      fetchAllPosts();
+
+    onMount(async () => {
+        try {
+          await fetchAllPosts();
+        } finally {
+          loading = false; // ✅ 請求結束後關閉 Loading 狀態
+        }
     });
+
   </script>
   
   <main>
@@ -33,27 +59,32 @@
       <li><button on:click={fetchPublishedPosts}>Published</button></li>
       <li><button on:click={fetchUnpublishedPosts}>Unpublished</button></li>
     </ul>
-    
-    {#if posts.length > 0}
-      {#each posts as post}
-        <article>
-          <h2>
-            <Link to={`/post/${post.id}`}>{post.title}</Link>
-          </h2>
-          {#if post.published}
-            <p>Status: Published</p>
-          {:else}
-            <p>Status: Unpublished</p>
-          {/if}
-          <p>Posted at: {formatDate(post.createdAt)}</p>
-          {#if post.updatedAt}
-            <p>Updated at: {formatDate(post.updatedAt)}</p>
-          {/if}
-          <p>{post.content}</p>
-        </article>
-      {/each}
+    {#if loading}
+      <p>Loading articles...</p>
     {:else}
-      <p>No articles available. Check back later!</p>
+      {#if posts.length > 0}
+        {#each posts as post}
+          <article>
+            <h2>
+              <a href={`/post/${post.id}`} on:click|preventDefault={() => goto(`/post/${post.id}`)}>
+                {post.title}
+              </a> 
+            </h2>
+            {#if post.published === true}
+              <p>Status: Published</p>
+            {:else}
+              <p>Status: Unpublished</p>
+            {/if}
+            <p>Posted at: {formatDate(post.createdAt)}</p>
+            {#if post.updatedAt}
+              <p>Updated at: {formatDate(post.updatedAt)}</p>
+            {/if}
+            <p>{post.content}</p>
+          </article>
+        {/each}
+      {:else}
+        <p>No articles available. Check back later!</p>
+      {/if}
     {/if}
   </main>
   

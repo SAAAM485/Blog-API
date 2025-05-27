@@ -1,24 +1,25 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
-    import { Link } from "svelte-routing";
+    import { goto } from "@mateothegreat/svelte5-router";
     import {
       getAllPublishedTags,
       getPublishedPosts,
       getPublishedPostsByTag
-    } from "../services/api.js";
-    import { formatDate } from "../utils/formatDate.js";
+    } from "../services/api";
+    import { formatDate } from "../utils/formatDate";
+    import type { Post } from "../types/Models";
   
-    let tags = [];
-    let posts = [];
-    let selectedTag = "";
+    let tags: string[] = [];
+    let posts: Post[] = [];
+    let selectedTag: string = "";
   
     onMount(async () => {
-      tags = await getAllPublishedTags();
-      posts = await getPublishedPosts();
+      posts = [...await getAllPosts()];
+      tags = [...await getAllTags()];
     });
   
     // 點選 tag 時如果該 tag 已被選取則解除篩選，否則取得該 tag 下的文章
-    async function toggleTag(tag) {
+    async function toggleTag(tag: string): Promise<void> {
       if (selectedTag === tag) {
         selectedTag = "";
         posts = await getPublishedPosts();
@@ -51,9 +52,9 @@
       {#each posts as post}
         <article>
           <h2>
-            <Link to={`/post/${post.id}`}>
+            <a href={`/post/${post.id}`} on:click|preventDefault={() => goto(`/post/${post.id}`)}>
               {post.title}
-            </Link>
+            </a>
           </h2>
           <p>{post.content}</p>
           <p>Posted at: {formatDate(post.createdAt)}</p>

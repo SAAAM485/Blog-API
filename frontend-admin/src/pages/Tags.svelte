@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
-    import { Link } from "svelte-routing";
+    import { goto } from "@mateothegreat/svelte5-router";
     import {
       getAllPosts,
       getPublishedPosts,
@@ -11,12 +11,13 @@
       getAllTags,
       getAllPublishedTags,
       getAllUnpublishedTags
-    } from "../services/api.js";
-    import { formatDate } from "../utils/formatDate.js";
+    } from "../services/api";
+    import { formatDate } from "../utils/formatDate";
+    import type { Post } from "../types/Models";
   
     // 文章與 tag 的資料
-    let posts = [];
-    let tags = [];
+    let posts: Post[] = [];
+    let tags: string[] = [];
     // 當前選取的 tag，預設無選取
     let selectedTag = "";
     // 當前的發布狀態篩選，預設為 "all"
@@ -24,68 +25,42 @@
   
     // 初次讀取全部文章與 tag
     onMount(async () => {
-      posts = await getAllPosts();
-      tags = await getAllTags();
+      posts = [...await getAllPosts()];
+      tags = [...await getAllTags()];
     });
   
     // 更換發布狀態篩選，
     // 同時根據是否有選取 tag 檢索符合條件的文章與 tag 清單
-    async function setStateFilter(filter) {
+    async function setStateFilter(filter: string): Promise<void> {
       stateFilter = filter;
-      if (selectedTag) {
-        // 依據狀態篩選，重新取得該 tag 下符合條件的文章
-        if (stateFilter === "all") {
-          posts = await getPostsByTag(selectedTag);
-        } else if (stateFilter === "published") {
-          posts = await getPublishedPostsByTag(selectedTag);
-        } else if (stateFilter === "unpublished") {
-          posts = await getUnpublishedPostsByTag(selectedTag);
-        }
-      } else {
-        // 沒有 tag 篩選時，根據狀態取得全部文章
-        if (stateFilter === "all") {
-          posts = await getAllPosts();
-        } else if (stateFilter === "published") {
-          posts = await getPublishedPosts();
-        } else if (stateFilter === "unpublished") {
-          posts = await getUnpublishedPosts();
-        }
-      }
-  
-      // 更新 tag 清單也依據狀態
-      if (stateFilter === "all") {
-        tags = await getAllTags();
-      } else if (stateFilter === "published") {
-        tags = await getAllPublishedTags();
-      } else if (stateFilter === "unpublished") {
-        tags = await getAllUnpublishedTags();
-      }
+      const postFetcher = selectedTag
+        ? {
+            all: getPostsByTag,
+            published: getPublishedPostsByTag,
+            unpublished: getUnpublishedPostsByTag,
+          }
+        : {
+            all: getAllPosts,
+            published: getPublishedPosts,
+            unpublished: getUnpublishedPosts,
+          };
+
+      posts = [...await postFetcher[stateFilter](selectedTag || "")];
+
+      const tagFetcher = {
+        all: getAllTags,
+        published: getAllPublishedTags,
+        unpublished: getAllUnpublishedTags,
+      };
+
+      tags = [...await tagFetcher[stateFilter]()];
     }
   
     // 點選 tag 時切換：如果點擊的 tag與目前選取的相同，就解除 tag 篩選，
     // 否則就套用該 tag 並依狀態篩選資料
-    async function toggleTag(tag) {
-      if (selectedTag === tag) {
-        // 解除 tag 篩選
-        selectedTag = "";
-        if (stateFilter === "all") {
-          posts = await getAllPosts();
-        } else if (stateFilter === "published") {
-          posts = await getPublishedPosts();
-        } else if (stateFilter === "unpublished") {
-          posts = await getUnpublishedPosts();
-        }
-      } else {
-        // 選取該 tag
-        selectedTag = tag;
-        if (stateFilter === "all") {
-          posts = await getPostsByTag(tag);
-        } else if (stateFilter === "published") {
-          posts = await getPublishedPostsByTag(tag);
-        } else if (stateFilter === "unpublished") {
-          posts = await getUnpublishedPostsByTag(tag);
-        }
-      }
+    async function toggleTag(tag: string): Promise<void> {
+      selectedTag = selectedTag === tag ? "" : tag;
+      await setStateFilter(stateFilter); // ✅ 直接重新載入符合篩選條件的文章
     }
   </script>
   
@@ -127,9 +102,9 @@
       {#each posts as post}
         <article class="post-card">
           <h2>
-            <Link to={`/post/${post.id}`}>
+            <a href={`/post/${post.id}`} on:click|preventDefault={() => goto(`/post/${post.id}`)}>
               {post.title}
-            </Link>
+            </a>
           </h2>
           <p>{post.content}</p>
           <p>Posted at: {formatDate(post.createdAt)}</p>
