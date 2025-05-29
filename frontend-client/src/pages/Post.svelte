@@ -2,19 +2,15 @@
     import { onMount } from "svelte";
     import { getPostById, getCommentsByPostId, addComment } from "../services/api";
     import type { Post, Comment } from "../types/Models";
+    import { formatDate } from "../utils/formatDate";
   
-    export let params: { id: string };
+    export let route;
+    export let params;
   
     let post: Post | null = null;
     let comments: Comment[] = [];
-  
-    interface NewComment {
-      author: string;
-      content: string;
-    }
-    let newComment: NewComment = { author: "", content: "" };
-  
-    const postId = params.id;
+    let newComment = { author: "", content: "" };
+    $: postId = route ? route.result.path.params.id : params.id;
   
     onMount(async () => {
       post = await getPostById(postId);
@@ -23,7 +19,7 @@
   
     async function submitComment(): Promise<void> {
       if (post) {
-        await addComment(post.id, newComment.author, newComment.content);
+        await addComment(postId, newComment.author, newComment.content);
         comments = await getCommentsByPostId(postId);
         newComment.author = "";
         newComment.content = "";
@@ -35,7 +31,7 @@
     {#if post}
       <h1>{post.title}</h1>
       <p>{post.content}</p>
-      {#if post.tags.length > 0}
+      {#if post.tags && post.tags.length > 0}
         <div class="tags">
           {#each post.tags as tag}
             <span class="tag">{tag}</span>
@@ -53,7 +49,7 @@
     <h2>Comments</h2>
     {#if comments.length > 0}
       <ul>
-        {#each comments as comment (comment.id)}
+        {#each comments as comment}
           <li>
             <strong>{comment.author}</strong>
             <span>(Commented at: {formatDate(comment.createdAt)})</span>:
@@ -68,7 +64,7 @@
     <h3>Leave a Comment</h3>
     <input type="text" bind:value={newComment.author} placeholder="Your Name" />
     <textarea bind:value={newComment.content} placeholder="Your Comment"></textarea>
-    <button on:click={submitComment}>Submit</button>
+    <button on:click={submitComment}>Submit Comment</button>
   </main>
 
   <style>

@@ -3,6 +3,7 @@
     import { fetchImages, uploadImages, deleteImage } from "../services/api";
     import type { Image } from "../types/Models";
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
     let images: Image[] = [];
 
     async function loadImages():Promise<void> {
@@ -46,7 +47,7 @@
 
     <div class="gallery">
     {#each images as image}
-        <img src="{image.url}" alt="{image.id}">
+        <img src={`${API_BASE_URL}${image.url}`} alt="{image.id}">
         <button on:click="{() => handleDelete(image.id)}">Delete</button>
     {/each}
 </div>

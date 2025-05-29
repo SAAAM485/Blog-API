@@ -21,6 +21,20 @@ async function fetchUnpublishedPosts(req, res) {
     }
 }
 
+async function fetchAllPostById(req, res) {
+    const { id } = req.params;
+    try {
+        const post = await db.getAllPostById(id);
+        if (!post) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+        res.status(200).json(post);
+    } catch (error) {
+        console.error("Error fetching post:", error);
+        res.status(500).json({ error: "Failed to fetch post" });
+    }
+}
+
 async function createPost(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -139,9 +153,8 @@ async function fetchPostsByTag(req, res) {
 
 async function fetchAllTags(req, res) {
     try {
-        const publishedTags = await db.getAllPublishedTags();
-        const unpublishedTags = await db.getAllUnpublishedTags();
-        res.status(200).json({ publishedTags, unpublishedTags });
+        const tags = await db.getAllTags();
+        res.status(200).json(tags);
     } catch (error) {
         console.error("Error fetching all tags:", error);
         res.status(500).json({ error: "Failed to fetch all tags" });
@@ -151,6 +164,7 @@ async function fetchAllTags(req, res) {
 module.exports = {
     fetchAllPosts,
     fetchUnpublishedPosts,
+    fetchAllPostById,
     createPost,
     unveilPost,
     hidePost,

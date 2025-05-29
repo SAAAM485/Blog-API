@@ -46,7 +46,7 @@ const validateComment = [
     body("author")
         .trim()
         .notEmpty()
-        .isLength({ min: 1, max: 10 })
+        .isLength({ min: 1, max: 16 })
         .withMessage(`Username ${usernameLengthErr}`),
     body("content").trim().notEmpty().withMessage("Content is required"),
 ];

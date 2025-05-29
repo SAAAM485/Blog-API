@@ -58,6 +58,7 @@
       <li><button on:click={fetchAllPosts}>All Posts</button></li>
       <li><button on:click={fetchPublishedPosts}>Published</button></li>
       <li><button on:click={fetchUnpublishedPosts}>Unpublished</button></li>
+      <button on:click={() => goto("/post/create")}>+ Article</button>
     </ul>
     {#if loading}
       <p>Loading articles...</p>

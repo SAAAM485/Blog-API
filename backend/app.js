@@ -1,13 +1,19 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-
+const cors = require("cors");
 const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    cors({
+        origin: ("http://localhost:5173", "http://localhost:5174"), // 或者使用 '*' 來允許所有來源
+    })
+);
+app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 
 const authRoutes = require("./routes/authRouter");
 const clientRoutes = require("./routes/clientRouter");

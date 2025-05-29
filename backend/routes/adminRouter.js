@@ -10,6 +10,7 @@ router.use(verifyToken);
 
 router.get("/blogs/unpublished", adminController.fetchUnpublishedPosts);
 router.get("/blogs", adminController.fetchAllPosts);
+router.get("/blogs/:id", adminController.fetchAllPostById);
 router.post("/blogs/:id/publish", adminController.unveilPost);
 router.post("/blogs/:id/unpublish", adminController.hidePost);
 router.post("/blogs", validatePost, adminController.createPost);

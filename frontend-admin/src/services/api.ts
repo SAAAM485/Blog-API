@@ -4,7 +4,7 @@ const API_BASE_URL = "http://localhost:3000/api";
 // 取得所有文章
 export async function getAllPosts(): Promise<Post[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/blogs`);
+        const response = await fetchWithAuth(`${API_BASE_URL}/admin/blogs`);
         if (!response.ok) {
             throw new Error(`Error fetching posts: ${response.status}`);
         }
@@ -42,7 +42,9 @@ export async function getPublishedPosts(): Promise<Post[]> {
 // 取得所有未發布文章
 export async function getUnpublishedPosts(): Promise<Post[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/blogs/unpublished`);
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/blogs/unpublished`
+        );
         if (!response.ok) {
             throw new Error(
                 `Error fetching unpublished posts: ${response.status}`
@@ -60,20 +62,25 @@ export async function getUnpublishedPosts(): Promise<Post[]> {
 }
 
 // 取得單篇文章
-export async function getPostById(postId: string): Promise<Post | null> {
+export async function getAllPostById(postId: string): Promise<Post | null> {
     try {
-        const response = await fetch(`${API_BASE_URL}/client/blogs/${postId}`);
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/blogs/${postId}`
+        );
         if (!response.ok) {
             throw new Error(
-                `Error fetching post ${postId}: ${response.status}`
+                `Error fetching all post ${postId}: ${response.status}`
             );
         }
         return await response.json();
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error(`Error in getPostById (${postId}):`, error.message);
+            console.error(
+                `Error in getAllPostById (${postId}):`,
+                error.message
+            );
         } else {
-            console.error(`Unknown error in getPostById (${postId})`);
+            console.error(`Unknown error in getAllPostById (${postId})`);
         }
         return null;
     }
@@ -86,7 +93,7 @@ export async function addPost(
     tags: string[]
 ): Promise<void> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/posts`, {
+        const response = await fetchWithAuth(`${API_BASE_URL}/admin/blogs`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title, content, tags }),
@@ -106,8 +113,8 @@ export async function addPost(
 // 發布文章
 export async function publishPost(postId: string): Promise<void> {
     try {
-        const response = await fetch(
-            `${API_BASE_URL}/admin/posts/${postId}/publish`,
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/blogs/${postId}/publish`,
             {
                 method: "POST",
             }
@@ -129,8 +136,8 @@ export async function publishPost(postId: string): Promise<void> {
 // 隱藏文章
 export async function hidePost(postId: string): Promise<void> {
     try {
-        const response = await fetch(
-            `${API_BASE_URL}/admin/posts/${postId}/hide`,
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/blogs/${postId}/unpublish`,
             {
                 method: "POST",
             }
@@ -156,11 +163,14 @@ export async function updatePost(
     tags: string[]
 ): Promise<void> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/posts/${postId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title, content, tags }),
-        });
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/blogs/${postId}`,
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, content, tags }),
+            }
+        );
         if (!response.ok) {
             throw new Error(
                 `Error updating post ${postId}: ${response.status}`
@@ -178,9 +188,12 @@ export async function updatePost(
 // 刪除文章
 export async function deletePost(postId: string): Promise<void> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/posts/${postId}`, {
-            method: "DELETE",
-        });
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/blogs/${postId}`,
+            {
+                method: "DELETE",
+            }
+        );
         if (!response.ok) {
             throw new Error(
                 `Error deleting post ${postId}: ${response.status}`
@@ -242,7 +255,7 @@ export async function getAllPublishedTags(): Promise<string[]> {
 // 使用標籤搜尋未發布文章
 export async function getUnpublishedPostsByTag(tag: string): Promise<Post[]> {
     try {
-        const response = await fetch(
+        const response = await fetchWithAuth(
             `${API_BASE_URL}/admin/tags/unpublished/${tag}`
         );
         if (!response.ok) {
@@ -267,7 +280,9 @@ export async function getUnpublishedPostsByTag(tag: string): Promise<Post[]> {
 // 取得所有未發布標籤
 export async function getAllUnpublishedTags(): Promise<string[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/tags/unpublished`);
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/tags/unpublished`
+        );
         if (!response.ok) {
             throw new Error(
                 `Error fetching unpublished tags: ${response.status}`
@@ -287,7 +302,9 @@ export async function getAllUnpublishedTags(): Promise<string[]> {
 // 使用標籤搜尋所有文章
 export async function getPostsByTag(tag: string): Promise<Post[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/tags/${tag}`);
+        const response = await fetchWithAuth(
+            `${API_BASE_URL}/admin/tags/${tag}`
+        );
         if (!response.ok) {
             throw new Error(
                 `Error fetching posts with tag ${tag}: ${response.status}`
@@ -307,7 +324,7 @@ export async function getPostsByTag(tag: string): Promise<Post[]> {
 // 取得所有標籤
 export async function getAllTags(): Promise<string[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/tags`);
+        const response = await fetchWithAuth(`${API_BASE_URL}/admin/tags`);
         if (!response.ok) {
             throw new Error(`Error fetching all tags: ${response.status}`);
         }
@@ -355,7 +372,7 @@ export async function addComment(
 ): Promise<void> {
     try {
         const response = await fetch(
-            `${API_BASE_URL}/client/posts/${postId}/comments`,
+            `${API_BASE_URL}/client/blogs/${postId}/comments`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -408,7 +425,7 @@ export async function apiLogin(
 }
 
 // 登出
-export async function apiLogout(): Promise<{ success: boolean }> {
+export async function apiLogout(): Promise<void> {
     try {
         const response = await fetch(`${API_BASE_URL}/auth/logout`, {
             method: "POST",
@@ -416,12 +433,9 @@ export async function apiLogout(): Promise<{ success: boolean }> {
         });
         if (!response.ok) {
             throw new Error(`Logout failed: ${response.status}`);
-        }
-        const data: { success: boolean } = await response.json();
-        if (data.success) {
+        } else {
             localStorage.removeItem("jwt");
         }
-        return data;
     } catch (error: unknown) {
         console.error("Error in apiLogout:", error);
         throw new Error("Logout failed");
@@ -472,7 +486,7 @@ export async function uploadImages(files: File[]): Promise<UploadResponse> {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/admin/images`, {
+        const response = await fetchWithAuth(`${API_BASE_URL}/admin/images`, {
             method: "POST",
             body: formData,
         });
@@ -490,7 +504,7 @@ export async function uploadImages(files: File[]): Promise<UploadResponse> {
 // 刪除圖片
 export async function deleteImage(imageId: string): Promise<void> {
     try {
-        const response = await fetch(
+        const response = await fetchWithAuth(
             `${API_BASE_URL}/admin/images/${imageId}`,
             {
                 method: "DELETE",

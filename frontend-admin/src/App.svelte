@@ -5,7 +5,8 @@
   import AboutMe from "./pages/AboutMe.svelte";
   import Articles from "./pages/Articles.svelte";
   import Tags from "./pages/Tags.svelte";
-  import Post from "./pages/Post.svelte"; 
+  import Post from "./pages/Post.svelte";
+  import CreatePost from "./pages/CreatePost.svelte";
   import Login from "./pages/Login.svelte";
   import { userStore } from "./stores/userStore";
 
@@ -14,7 +15,8 @@
     { path: "/about", component: AboutMe },
     { path: "/articles", component: Articles },
     { path: "/tags", component: Tags },
-    { path: "/post/:id", component: Post }
+    { path: "/post/(?<id>[^/]+)", component: Post },
+    { path: "/post/create", component: CreatePost}
   ]
 </script>
 

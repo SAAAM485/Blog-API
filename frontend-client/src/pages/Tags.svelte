@@ -14,8 +14,8 @@
     let selectedTag: string = "";
   
     onMount(async () => {
-      posts = [...await getAllPosts()];
-      tags = [...await getAllTags()];
+      posts = [...await getPublishedPosts()];
+      tags = [...await getAllPublishedTags()];
     });
   
     // 點選 tag 時如果該 tag 已被選取則解除篩選，否則取得該 tag 下的文章
@@ -32,8 +32,6 @@
   
   <main>
     <h1>Tags</h1>
-    
-    <!-- Tag 清單，可點選後自行 toggle -->
     <ul>
       {#each tags as tag}
         <li>

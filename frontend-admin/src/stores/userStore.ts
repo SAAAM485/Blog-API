@@ -23,8 +23,6 @@ export async function login(username: string, password: string): Promise<void> {
 
 // ✅ 處理登出並清除狀態
 export async function logout(): Promise<void> {
-    const data = await apiLogout(); // ✅ 等待 API 回應
-    if (data.success) {
-        userStore.set({ token: null, isLoggedIn: false });
-    }
+    await apiLogout(); // ✅ 等待 API 回應
+    userStore.set({ token: null, isLoggedIn: false });
 }

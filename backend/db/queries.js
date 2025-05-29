@@ -53,6 +53,20 @@ async function getPostById(id) {
     }
 }
 
+async function getAllPostById(id) {
+    try {
+        const post = await prisma.post.findUnique({
+            where: {
+                id,
+            },
+        });
+        return post;
+    } catch (error) {
+        console.error("Error fetching the post:", error);
+        throw new Error("Failed to fetch the post");
+    }
+}
+
 async function postPost(title, content, tags) {
     if (!title || !content) {
         throw new Error("Title and content are required");
@@ -187,7 +201,7 @@ async function getAllPostsByTag(tag) {
 async function getAllTags() {
     const publishedTags = await getAllPublishedTags();
     const unpublishedTags = await getAllUnpublishedTags();
-    return [...new Set([...publishedTags, ...unpublishedTags])];
+    return [...publishedTags, ...unpublishedTags];
 }
 
 async function getCommentsByPostId(postId) {
@@ -281,6 +295,7 @@ module.exports = {
     getPublishedPosts,
     getUnpublishedPosts,
     getPostById,
+    getAllPostById,
     postPost,
     publishPost,
     unpublishPost,

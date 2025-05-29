@@ -12,7 +12,7 @@
     { path: "/about", component: AboutMe },
     { path: "/articles", component: Articles },
     { path: "/tags", component: Tags },
-    { path: "/post/:id", component: Post }
+    { path: "/post/(?<id>[^/]+)", component: Post }
   ];
 </script>
 
