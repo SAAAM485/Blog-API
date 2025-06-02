@@ -55,11 +55,11 @@
 <main>
     <form on:submit|preventDefault={createPost}>
         <h1>Create New Post</h1>
-        <div>
+        <div class="form-group">
             <label for="title">Title</label>
             <input type="text" id="title" bind:value={title} on:input={handleTitleInput} required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="content">Content</label>
             <textarea id="content" bind:value={content} on:input={handleContentInput} required></textarea>
         </div>
@@ -76,43 +76,70 @@
 </main>
 
 <style>
-    h1, div {
-      margin-bottom: 1rem;
+    main {
+      width: 50vw;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #4D686A;
     }
-    textarea {
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
-      min-height: 100px;
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    label {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    input, textarea {
+        padding: 0.5rem;
+        border: 0.02rem solid #D8B283;
+        border-radius: 0.2rem;
+        font-size: 1rem;
+    }
+    input:focus, textarea:focus {
+        border-color: #46b1c9;
+        outline: none;
     }
     button {
-      margin-right: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #D8B283;
+        color: #F5F5F4;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    button:hover {
+        background-color: #F5F5F4;
+        color: #D8B283;
     }
     .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
+        width: 100%;
     }
     .tag {
-      background-color: #0073e6;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      cursor: text;
+        margin-right: 0;
+        margin-left: 1rem;
     }
     .remove-tag {
-      background: none;
-      border: none;
-      font-size: 14px;
-      color: red;
-      cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 14px;
+        color: red;
+        cursor: pointer;
     }
     .tag:empty::before {
-      content: "Enter tag...";
-      color: #ccc;
-      pointer-events: none;
+        content: "Enter tag...";
+        color: #ccc;
+        pointer-events: none;
     }
 </style>
   

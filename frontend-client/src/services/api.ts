@@ -32,9 +32,12 @@ export async function getPostById(postId: string): Promise<Post | null> {
         return (await response.json()) as Post;
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error(`Error in getPostById (${postId}):`, error.message);
+            console.error(
+                `Error in getPublishedPostById (${postId}):`,
+                error.message
+            );
         } else {
-            console.error(`Unknown error in getPostById (${postId})`);
+            console.error(`Unknown error in getPublishedPostById (${postId})`);
         }
         return null;
     }

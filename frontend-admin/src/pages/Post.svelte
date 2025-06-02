@@ -139,16 +139,18 @@
           {/each}
           <button on:click={addTag}>+ Add Tag</button>
         </div>
-        <button on:click={togglePublish}>
-          {#if post.published}Hide{:else}Publish{/if}
-        </button>
-        <button on:click={submitUpdate}>Submit Edit</button>
-        <button on:click={cancelEditing}>Cancel</button>
-        <button on:click={submitDelete}>Delete Post</button>
+        <div class="edit_buttons">
+          <button on:click={togglePublish}>
+            {#if post.published}Hide{:else}Publish{/if}
+          </button>
+          <button on:click={submitUpdate}>Submit Edit</button>
+          <button on:click={cancelEditing}>Cancel</button>
+          <button on:click={submitDelete}>Delete Post</button>
+        </div>
       </div>
     {:else}
       <h1>{post.title}</h1>
-      <div>{@html post.content}</div>
+      <p class="content">{@html post.content}</p>
       {#if post.tags && post.tags.length > 0}
         <div class="tags">
           {#each post.tags as tag}
@@ -156,19 +158,18 @@
           {/each}
         </div>
       {/if}
-      <p>Posted at: {formatDate(post.createdAt)}</p>
-      {#if post.updatedAt}
-        <p>Updated at: {formatDate(post.updatedAt)}</p>
-      {/if}
-      <button on:click={startEditing}>Edit Post</button>
-      <button on:click={submitDelete}>Delete Post</button>
+      <p>Posted at {formatDate(post.createdAt)}{#if post.updatedAt}&nbsp;/ Updated at {formatDate(post.updatedAt)}{/if}</p>
+      <div class="buttons">
+        <button on:click={startEditing}>Edit Post</button>
+        <button on:click={submitDelete}>Delete Post</button>
+      </div>
     {/if}
   {:else}
     <p>Loading post...</p>
   {/if}
-
-  <h2>Comments</h2>
   {#if comments.length > 0}
+  <div class="comments">
+    <h2>Comments</h2>
     <ul>
       {#each comments as comment}
         <li>
@@ -178,60 +179,195 @@
         </li>
       {/each}
     </ul>
+  </div>
   {:else}
-    <p>No comments yet. Be the first to comment!</p>
+    <p class="notes">No comments yet. Be the first to comment!</p>
   {/if}
-    
-  <h3>Leave a Comment</h3>
-  <p>Commenting with BagelTheCat</p>
-  <textarea bind:value={newComment.content} placeholder="Your Comment"></textarea>
-  <button on:click={submitComment}>Submit Comment</button>
+  <div class="new_comment">
+    <h3>Leave a Comment</h3>
+    <p>Commenting with BagelTheCat</p>
+    <textarea bind:value={newComment.content} placeholder="Your Comment"></textarea>
+    <button on:click={submitComment}>Submit Comment</button>
+  </div>  
 </main>
 
 <style>
-  .edit-mode h1,
-  .edit-mode div {
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    min-height: 40px;
-  }
-  h1, div {
-    margin-bottom: 1rem;
-  }
-  textarea {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    min-height: 100px;
-  }
-  button {
-    margin-right: 1rem;
-  }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-  .tag {
-    background-color: #0073e6;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: text;
-  }
-  .remove-tag {
-    background: none;
-    border: none;
-    font-size: 14px;
-    color: red;
-    cursor: pointer;
-  }
-  .tag:empty::before {
-    content: "Enter tag...";
-    color: #ccc;
-    pointer-events: none;
-  }
+    main {
+        max-width: 70vw;
+        margin: 2rem auto;
+        color: #4D686A;
+    }
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+    }
+    p {
+        width: 50vw;
+        justify-self: center;
+        font-size: 0.8rem;
+    }
+    p.content {
+        width: 50vw;
+        justify-self: center;
+        text-wrap: wrap;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }
+    .tags {
+        width: 50vw;
+        justify-self: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .tag {
+        padding: 0.5rem 1rem;
+        margin-right: 1rem;
+        border: 0.02rem solid #D8B283;
+        border-radius: 0.2rem;
+        cursor: pointer;
+        background: #F5F5F4;
+    }
+    .buttons {
+        width: 50vw;
+        justify-self: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .buttons button {
+        padding: 0.5rem 1rem;
+        margin-right: 1rem;
+        border: 0.02rem solid #D8B283;
+        border-radius: 0.2rem;
+        cursor: pointer;
+        background: #F5F5F4;
+    }
+    .buttons button:hover {
+        background: #D8B283;
+    }
+    .comments {
+        display: flex;
+        flex-direction: column;
+        max-width: 50vw;
+        margin: 2rem auto;
+        font-size: 1rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    .comments ul {
+        list-style: none;
+        padding: 0;
+    }
+    .comments span{
+        font-size: 0.8rem;
+        color: #678B8E;
+    }
+    .new_comment {
+        display: flex;
+        flex-direction: column;
+        max-width: 50vw;
+        margin: 2rem auto;
+    }
+    .new_comment * {
+        margin-bottom: 0.5rem;
+    }
+    .new_comment h3 {
+        font-size: 1.5rem;
+
+    }
+    .new_comment textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 0.02rem solid #D8B283;
+        border-radius: 0.2rem;
+    }
+    .new_comment button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.2rem;
+        background-color: #D8B283;
+        color: #F5F5F4;
+        cursor: pointer;
+        width: 100%;
+    }
+    .new_comment button:hover {
+        background-color: #F5F5F4;
+        color: #D8B283;
+    }
+    .edit-mode {
+        max-width: 50vw;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border: 1px solid #D8B283;
+        border-radius: 5px;
+    }
+    .edit-mode button {
+        margin-right: 1rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.2rem;
+        background-color: #F5F5F4;
+        color: #D8B283;
+        cursor: pointer;
+    }
+    .edit-mode button:hover {
+        background-color: #D8B283;
+        color: #F5F5F4;
+    }
+    .edit-mode .edit_buttons {
+        text-align: center;
+    } 
+    .edit-mode .edit_buttons button {
+        width: 8rem;
+        margin: 0 1rem;
+        background-color: #D8B283;
+        color: #F5F5F4;
+    } 
+    .edit-mode .edit_buttons button:hover {
+        background-color: #F5F5F4;
+        color: #D8B283;
+    } 
+    .edit-mode h1,
+    .edit-mode div {
+        border: 0.02rem solid #D8B283;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        min-height: 40px;
+    }
+    h1, div {
+        margin-bottom: 1rem;
+    }
+    textarea {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        min-height: 100px;
+    }
+    button {
+        margin-right: 1rem;
+    }
+    .edit-mode .tags {
+        width: 100%;
+    }
+    .edit-mode .tag {
+        margin-right: 0;
+        margin-left: 1rem;
+    }
+    .edit-mode .remove-tag {
+        background: none;
+        border: none;
+        font-size: 14px;
+        color: red;
+        cursor: pointer;
+    }
+    .tag:empty::before {
+        content: "Enter tag...";
+        color: #ccc;
+        pointer-events: none;
+    }
 </style>

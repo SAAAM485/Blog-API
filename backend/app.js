@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
     cors({
-        origin: ("http://localhost:5173", "http://localhost:5174"), // 或者使用 '*' 來允許所有來源
+        origin: ["http://localhost:5173", "http://localhost:5174"], // 或者使用 '*' 來允許所有來源
     })
 );
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));

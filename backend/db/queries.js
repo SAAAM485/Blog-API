@@ -40,7 +40,7 @@ async function getUnpublishedPosts() {
 
 async function getPostById(id) {
     try {
-        const post = await prisma.post.findMany({
+        const post = await prisma.post.findUnique({
             where: {
                 id,
                 published: true,

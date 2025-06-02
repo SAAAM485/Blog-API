@@ -54,30 +54,34 @@
               {post.title}
             </a>
           </h2>
-          <p>{post.content}</p>
-          <p>Posted at: {formatDate(post.createdAt)}</p>
-          {#if post.updatedAt}
-            <p>Updated at: {formatDate(post.updatedAt)}</p>
-          {/if}
+          <p>Posted at {formatDate(post.createdAt)}{#if post.updatedAt}&nbsp;/ Updated at {formatDate(post.updatedAt)}{/if}</p>
+          <p class="content">{post.content}</p>
         </article>
       {/each}
     {:else}
-      <p>No posts found for this tag.</p>
+      <p class="note">No posts found for this tag.</p>
     {/if}
   </main>
   
   <style>
-    /* 調整按鈕樣式，當選中的 tag 按鈕會有不同背景 */
+    main {
+      max-width: 70vw;
+      margin: 2rem auto;
+    }
+    ul {
+      text-align: center;
+    }
     button {
       padding: 0.5rem 1rem;
       margin-right: 1rem;
-      border: 1px solid #ccc;
+      border: 0.02rem solid #D8B283;
+      border-radius: 0.2rem;
       cursor: pointer;
-      background: #f5f5f5;
+      background: #F5F5F4;
+      color: #4D686A;
     }
     button.selected {
-      background: #ddd;
-      border-color: #999;
+      background: #D8B283;
     }
     ul {
       list-style: none;
@@ -87,13 +91,41 @@
       display: inline-block;
       margin-bottom: 0.5rem;
     }
-    article {
-      border: 1px solid #eee;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-    }
     article h2 {
       margin-top: 0;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #4D686A;
+    }
+    article {
+      height: 20vh;
+      margin-bottom: 2rem;
+      padding: 1rem 2rem;
+      border: 0.02rem solid #4D686A;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    h2 a {
+      color: #4D686A;
+      font-size: 2rem;
+      text-decoration: none;
+    }
+    h2 a:hover {
+      text-decoration: underline;
+    }
+    p {
+      font-size: 0.8rem;
+    }
+    p.content {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    p.note {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #4D686A;
     }
   </style>
   

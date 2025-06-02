@@ -50,9 +50,9 @@
         }
     });
 
-  </script>
+</script>
   
-  <main>
+<main>
     <h1>Articles</h1>
     <ul>
       <li><button on:click={fetchAllPosts}>All Posts</button></li>
@@ -61,7 +61,7 @@
       <button on:click={() => goto("/post/create")}>+ Article</button>
     </ul>
     {#if loading}
-      <p>Loading articles...</p>
+      <p class="note">Loading articles...</p>
     {:else}
       {#if posts.length > 0}
         {#each posts as post}
@@ -76,16 +76,78 @@
             {:else}
               <p>Status: Unpublished</p>
             {/if}
-            <p>Posted at: {formatDate(post.createdAt)}</p>
-            {#if post.updatedAt}
-              <p>Updated at: {formatDate(post.updatedAt)}</p>
-            {/if}
-            <p>{post.content}</p>
+            <p>Posted at {formatDate(post.createdAt)}{#if post.updatedAt}&nbsp;/ Updated at {formatDate(post.updatedAt)}{/if}</p>
+            <p class="content">{post.content}</p>
           </article>
         {/each}
       {:else}
-        <p>No articles available. Check back later!</p>
+        <p class="note">No articles available. Check back later!</p>
       {/if}
     {/if}
-  </main>
+</main>
+
+<style>
+  main {
+    max-width: 70vw;
+    margin: 2rem auto;
+  }
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #4D686A;
+  }
+  ul {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  ul li {
+    list-style: none;
+  }
+  ul button {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    border: 0.02rem solid #D8B283;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    background: #F5F5F4;
+    color: #4D686A;
+  }
+  ul button:hover {
+    background: #D8B283;
+  }
+  ul button:focus {
+    outline: none;
+    box-shadow: 0 0 0.2rem #D8B283;
+  }
+  article {
+    height: 20vh;
+    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    border: 0.02rem solid #4D686A;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  h2 a {
+    color: #4D686A;
+    font-size: 2rem;
+    text-decoration: none;
+  }
+  h2 a:hover {
+    text-decoration: underline;
+  }
+  p {
+    font-size: 0.8rem;
+  }
+  p.content {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+  p.note {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #4D686A;
+  }
+</style>
   

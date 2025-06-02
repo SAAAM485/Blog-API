@@ -33,3 +33,43 @@
       </form>
   </main>
   
+  <style>
+    main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #4D686A;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+    }
+    label {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    input {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border: 0.02rem solid #ccc;
+        border-radius: 0.5rem;
+    }
+    button {
+        padding: 0.5rem;
+        background-color: #46b1c9;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #84C0C6;
+    }
+    h1 {
+        color: #4D686A;
+        margin-bottom: 2rem;
+    }
+  </style>

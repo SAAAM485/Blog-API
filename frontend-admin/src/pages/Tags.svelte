@@ -62,9 +62,9 @@
       selectedTag = selectedTag === tag ? "" : tag;
       await setStateFilter(stateFilter); // ✅ 直接重新載入符合篩選條件的文章
     }
-  </script>
+</script>
   
-  <main>
+<main>
     <h1>Tags & Posts</h1>
   
     <!-- 發布狀態篩選按鈕 -->
@@ -106,44 +106,85 @@
               {post.title}
             </a>
           </h2>
-          <p>{post.content}</p>
-          <p>Posted at: {formatDate(post.createdAt)}</p>
-          {#if post.updatedAt}
-            <p>Updated at: {formatDate(post.updatedAt)}</p>
-          {/if}
+          <p>Posted at {formatDate(post.createdAt)}{#if post.updatedAt}&nbsp;/ Updated at {formatDate(post.updatedAt)}{/if}</p>
+          <p class="content">{post.content}</p>
         </article>
       {/each}
     {:else}
-      <p>No posts available.</p>
+      <p class="note">No posts available.</p>
     {/if}
-  </main>
+</main>
   
-  <style>
-    .state-filters button,
-    .tag-list button {
-      margin-right: 1rem;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-    button.selected {
-      background-color: #ddd;
-      border: 1px solid #999;
-    }
-    .post-card {
-      border: 1px solid #eee;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .post-card h2 {
+<style>
+  main {
+    max-width: 70vw;
+    margin: 2rem auto;
+  }
+  h1, h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #4D686A;
+  }
+  .state-filters {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  ul {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  ul li {
+    list-style: none;
+  }
+  button {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    border: 0.02rem solid #D8B283;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    background: #F5F5F4;
+    color: #4D686A;
+  }
+  button:hover {
+    background: #D8B283;
+  }
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 0.2rem #D8B283;
+  }
+  article {
+    height: 20vh;
+    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    border: 0.02rem solid #4D686A;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  article h2 {
       margin-top: 0;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    .tag-list li {
-      display: inline-block;
-      margin-right: 1rem;
-    }
-  </style>
+      text-align: left;
+  }
+  h2 a {
+    color: #4D686A;
+    font-size: 2rem;
+    text-decoration: none;
+  }
+  h2 a:hover {
+    text-decoration: underline;
+  }
+  p {
+    font-size: 0.8rem;
+  }
+  p.content {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+  p.note {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #4D686A;
+  }
+</style>
   
