@@ -1,6 +1,7 @@
 import type { Post, Comment, Image } from "../types/Models";
 
-const API_BASE_URL: string = "http://localhost:3000/api/client";
+const API_BASE_URL: string =
+    "https://blog-api-production-a8d0.up.railway.app/api/client";
 
 // 取得所有文章
 export async function getPublishedPosts(): Promise<Post[]> {
