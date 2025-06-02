@@ -3,7 +3,7 @@
     import { fetchImages } from "../services/api";
     import type { Image } from "../types/Models";
 
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://blog-api-production-a8d0.up.railway.app/api";
     let images: Image[] = [];
     let currentIndex = 0;
     let intervalId: number;

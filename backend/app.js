@@ -13,10 +13,10 @@ app.use(
         origin: [
             "http://localhost:5173",
             "http://localhost:5174",
-            "https://saaam485.github.io/",
-            "https://blog-api-frontend-admin.netlify.app/",
-            "https://blog-api-frontend-client.netlify.app/",
-        ], // 或者使用 '*' 來允許所有來源
+            "https://saaam485.github.io",
+            "https://blog-api-frontend-admin.netlify.app",
+            "https://blog-api-frontend-client.netlify.app",
+        ],
     })
 );
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
